@@ -1,15 +1,29 @@
-#!/usr/bin/awk -f
+#!/usr/local/bin/gawk -f
 
 BEGIN {
     f=0
-    if (argv[1]!="") {
-        f=argv[1]
-        delete argv[1]
+    w=0
+    if (ARGV[1]!="") {
+        f=ARGV[1]
+        delete ARGV[1]
     }
+    if (ARGV[1]!="") {
+        w=ARGV[1]
+        delete ARGV[1]
+    }
+    if (FS==" ")
+        FS="[|,]"
+    if (ARGV[1]=="")
+        ARGV[1]="/dev/stdin"
 } {
-    nr++
-    n[$f]+=1
+    if (w==0)
+        wg=1
+    else
+        wg=$w
+    n[$f]+=wg
+    nr+=wg
 } END {
-    for (i in n) 
-        printf("%s,%d,%.2f%s\n",i,n[i],n[i]*100/nr,"%")
+    asorti(n,ns)
+    for (i in ns) 
+        printf("%s,%d,%.2f%s\n",ns[i],n[ns[i]],n[ns[i]]*100/nr,"%")
 }
