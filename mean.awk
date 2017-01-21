@@ -90,15 +90,24 @@ BEGIN {
     for (i in ns1) {
         line=ns1[i]
         for (j in ns2) {
-            line=line","sprintf("%.2f",nt[ns1[i],ns2[j]]/tt[ns1[i],ns2[j]])
+            if (nt[ns1[i],ns2[j]]>0)
+                line=line","sprintf("%.2f",tt[ns1[i],ns2[j]]/nt[ns1[i],ns2[j]])
+            else
+                line=line",-"
         }
-        line=line","sprintf("%.2f",n1[ns1[i]]/t1[ns1[i]])
+        if (n1[ns1[i]]>0)
+            line=line","sprintf("%.2f",t1[ns1[i]]/n1[ns1[i]])
+        else
+            line=line",-"
         print line
     }
     tail="Total"
-    for (j in ns2) 
-        tail=tail","sprintf("%.2f",n2[ns2[j]]/t2[ns2[j]])
-    tail=tail","sprintf("%.2f",nr/tr)
+    for (j in ns2)
+        if (n2[ns2[j]]>0)
+            tail=tail","sprintf("%.2f",t2[ns2[j]]/n2[ns2[j]])
+        else
+            tail=tail",-"
+    tail=tail","sprintf("%.2f",tr/nr)
     print tail
 
 }
